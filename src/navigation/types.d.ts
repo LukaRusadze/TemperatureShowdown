@@ -3,11 +3,7 @@ import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 
 declare module '@navigation' {
   type StackParamList = {
-    Login: undefined;
-    Register: undefined;
-
     Home: undefined;
-    Profile: undefined;
   };
 
   type MainStackScreenProps<T extends keyof StackParamList> = StackScreenProps<

@@ -10,7 +10,6 @@
           "@navigation": "./src/navigation",
           "@primitives": "./src/primitives",
           "@screens": "./src/screens",
-          "@store": "./src/store",
           "@hooks": "./src/hooks",
           "@assets": "./assets",
           "@constants": "./src/constants"
