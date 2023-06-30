@@ -1,0 +1,62 @@
+import {
+  Dimensions,
+  Pressable,
+  PressableProps,
+  StyleSheet,
+  Text,
+} from 'react-native';
+import React from 'react';
+import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
+import { useTheme } from '@react-navigation/native';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+const { width } = Dimensions.get('window');
+
+interface Props extends PressableProps {
+  title: string;
+}
+
+const Button = ({ title, onPressIn, onPressOut, ...props }: Props) => {
+  const opacity = useSharedValue(1);
+  const { colors } = useTheme();
+
+  const _onPressIn: Props['onPressIn'] = event => {
+    onPressIn?.(event);
+    opacity.value = withTiming(0.5, { duration: 100 });
+  };
+
+  const _onPressOut: Props['onPressOut'] = event => {
+    onPressOut?.(event);
+    opacity.value = withTiming(1, { duration: 200 });
+  };
+
+  return (
+    <AnimatedPressable
+      {...props}
+      onPressIn={_onPressIn}
+      onPressOut={_onPressOut}
+      style={[
+        styles.container,
+        { backgroundColor: colors.primary },
+        { opacity },
+      ]}>
+      <Text style={[styles.text, { color: colors.text }]}>{title}</Text>
+    </AnimatedPressable>
+  );
+};
+
+export default Button;
+
+const styles = StyleSheet.create({
+  container: {
+    width: width * 0.5,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+  },
+  text: {
+    fontSize: 24,
+  },
+});
