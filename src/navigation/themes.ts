@@ -4,7 +4,8 @@ const LightTheme: Theme = {
   dark: false,
   colors: {
     ...DefaultTheme.colors,
-    background: '#FFFFFF',
+    primary: '#F14558',
+    background: '#FFC2C5',
     text: '#000000',
   },
 };
