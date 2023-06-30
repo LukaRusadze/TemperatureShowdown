@@ -1,17 +1,10 @@
-import {
-  Dimensions,
-  Pressable,
-  PressableProps,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import { Pressable, PressableProps, Text } from 'react-native';
 import React from 'react';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import { useTheme } from '@react-navigation/native';
+import styles from './styles';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-const { width } = Dimensions.get('window');
 
 interface Props extends PressableProps {
   title: string;
@@ -47,16 +40,3 @@ const Button = ({ title, onPressIn, onPressOut, ...props }: Props) => {
 };
 
 export default Button;
-
-const styles = StyleSheet.create({
-  container: {
-    width: width * 0.5,
-    height: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 12,
-  },
-  text: {
-    fontSize: 24,
-  },
-});

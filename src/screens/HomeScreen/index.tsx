@@ -7,11 +7,12 @@ import { useGameState } from '@context';
 
 type Props = MainStackScreenProps<'Home'>;
 
-const HomeScreen = ({}: Props) => {
+const HomeScreen = ({ navigation }: Props) => {
   const gameInstance = useGameState();
 
   const handleGameStart = (difficulty: GameDifficultyLevel) => () => {
     gameInstance.chooseDifficulty(difficulty);
+    navigation.navigate('Game');
   };
 
   return (

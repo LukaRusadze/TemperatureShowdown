@@ -4,6 +4,7 @@ import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 declare module '@navigation' {
   type StackParamList = {
     Home: undefined;
+    Game: undefined;
   };
 
   type MainStackScreenProps<T extends keyof StackParamList> = StackScreenProps<
