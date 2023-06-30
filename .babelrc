@@ -12,9 +12,12 @@
           "@screens": "./src/screens",
           "@hooks": "./src/hooks",
           "@assets": "./assets",
-          "@constants": "./src/constants"
+          "@constants": "./src/constants",
+          "@context": "./src/context",
+          "@utils": "./src/utils"
         }
       }
-    ]
+    ],
+    ["react-native-reanimated/plugin"]
   ]
 }

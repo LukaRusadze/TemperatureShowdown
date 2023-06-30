@@ -18,7 +18,11 @@
       "@hooks/*": ["./hooks/*"],
       "@assets/*": ["../assets/*"],
       "@constants": ["./constants"],
-      "@constants/*": ["./constants/*"]
+      "@constants/*": ["./constants/*"],
+      "@context": ["./context"],
+      "@context/*": ["./context/*"],
+      "@utils": ["./utils"],
+      "@utils/*": ["./utils/*"]
     }
   }
 }
