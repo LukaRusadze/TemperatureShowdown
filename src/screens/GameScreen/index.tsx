@@ -1,20 +1,40 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { MainStackScreenProps } from '@navigation';
-import { useGameState } from '@context';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useCitiesDataRandomizer } from '@hooks';
+import { Button } from '@primitives';
 
 type Props = MainStackScreenProps<'Game'>;
 
 const GameScreen = ({}: Props) => {
-  const gameInstance = useGameState();
+  const { cities, isLoading, randomize } = useCitiesDataRandomizer();
+
   return (
-    <SafeAreaView>
-      <Text>GameScreen</Text>
+    <SafeAreaView style={styles.container}>
+      {isLoading ? (
+        <ActivityIndicator size={'large'} />
+      ) : (
+        <View>
+          {cities.map((city, index) => (
+            <View key={index}>
+              <Text>{city.city}</Text>
+              <Text>{city.temperature}</Text>
+            </View>
+          ))}
+        </View>
+      )}
+      <Button title={'Randomize'} onPress={randomize} />
     </SafeAreaView>
   );
 };
 
 export default GameScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+});
