@@ -1,1 +1,1 @@
-export {};
+export { useCitiesDataRandomizer } from './useCitiesDataRandomizer';

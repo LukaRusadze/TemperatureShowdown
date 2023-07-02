@@ -10,9 +10,11 @@ import { Game } from '@utils';
 
 enableScreens(true);
 
+const gameInstance = new Game();
+
 const App = () => {
   return (
-    <GameContext.Provider value={new Game()}>
+    <GameContext.Provider value={gameInstance}>
       <GestureHandlerRootView style={styles.container}>
         <SystemBars animated={true} barStyle={'dark-content'} />
         <NavigationContainer theme={LightTheme}>
