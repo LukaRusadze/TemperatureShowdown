@@ -1,10 +1,9 @@
-import { Platform, Pressable, PressableProps, Text } from 'react-native';
+import { Platform, PressableProps, Text } from 'react-native';
 import React from 'react';
-import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
+import { useSharedValue, withTiming } from 'react-native-reanimated';
 import { useTheme } from '@react-navigation/native';
 import styles from './styles';
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+import { AnimatedPressable } from '@primitives';
 
 interface Props extends PressableProps {
   title: string;
