@@ -1,12 +1,20 @@
+import { CITIES } from '@constants';
+import axios from 'axios';
+
 interface IGame {
-  readonly difficulties: GameDifficulties;
   gameDifficultyLevel: GameDifficultyLevel;
+  gameInfo: GameDifficulty;
+  currentCitiesInfo: City[];
   chooseDifficulty(difficulty: GameDifficultyLevel): void;
-  getGameInfo(): GameDifficulty;
+  nextRound(): Promise<City[]>;
 }
 
 export class Game implements IGame {
-  readonly difficulties: GameDifficulties = {
+  private currentCities: string[] = [];
+  private _currentCitiesInfo: City[] = [];
+  private _gameDifficultyLevel: GameDifficultyLevel = 'Easy';
+
+  private readonly difficulties: GameDifficulties = {
     Easy: {
       roundAmount: 10,
       cardAmount: 2,
@@ -30,13 +38,63 @@ export class Game implements IGame {
     },
   };
 
-  gameDifficultyLevel: GameDifficultyLevel = 'Easy';
-
   chooseDifficulty(difficulty: GameDifficultyLevel) {
-    this.gameDifficultyLevel = difficulty;
+    this._gameDifficultyLevel = difficulty;
   }
 
-  getGameInfo(): GameDifficulty {
-    return this.difficulties[this.gameDifficultyLevel];
+  async nextRound(): Promise<City[]> {
+    this.getNewCities();
+    const cityPromises: Promise<City>[] = this.currentCities.map(
+      this.fetchCityDetails,
+    );
+    this._currentCitiesInfo = await Promise.all(cityPromises);
+    return this._currentCitiesInfo;
+  }
+
+  private fetchCityTemperature = async (city: string) => {
+    const { data } = await axios.get<WeatherResponse>(
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=a8002a35a44e8e3507b54d728fb635aa`,
+    );
+
+    return Math.round(data.main.temp);
+  };
+
+  private fetchCityImage = async (city: string) => {
+    const { data } = await axios.get<ImageResponse>(
+      `https://pixabay.com/api/?q=${city}&per_page=3&key=38071086-8f1a664b5219c8bbfb9cd12cc`,
+    );
+    return (
+      data.hits[0]?.webformatURL ??
+      'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg'
+    );
+  };
+
+  private fetchCityDetails = async (city: string) => {
+    const [temperature, image] = await Promise.all([
+      this.fetchCityTemperature(city),
+      this.fetchCityImage(city),
+    ]);
+
+    return { city, temperature, image };
+  };
+
+  private getNewCities() {
+    this.currentCities.length = 0;
+    for (let i = 0; i < this.gameInfo.cardAmount; i++) {
+      const randomNumber = Math.floor(Math.random() * (CITIES.length - 1)) + 0;
+      this.currentCities.push(CITIES[randomNumber]);
+    }
+  }
+
+  get gameInfo(): GameDifficulty {
+    return this.difficulties[this._gameDifficultyLevel];
+  }
+
+  get gameDifficultyLevel(): GameDifficultyLevel {
+    return this._gameDifficultyLevel;
+  }
+
+  get currentCitiesInfo(): City[] {
+    return this._currentCitiesInfo;
   }
 }
