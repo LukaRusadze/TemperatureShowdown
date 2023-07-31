@@ -8,18 +8,15 @@ const useCitiesDataRandomizer = () => {
   const [error, setError] = useState<unknown>(undefined);
 
   const randomize = useCallback(async () => {
-    setIsLoading(true);
     try {
       setCities(await gameInstance.nextRound());
     } catch (e) {
       setError(e);
-    } finally {
-      setIsLoading(false);
     }
   }, [gameInstance]);
 
   useEffect(() => {
-    randomize();
+    randomize().then(() => setIsLoading(false));
   }, [randomize]);
 
   return {

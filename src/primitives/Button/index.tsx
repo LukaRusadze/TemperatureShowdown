@@ -25,7 +25,7 @@ const Button = ({ title, onPressIn, onPressOut, ...props }: Props) => {
 
   return (
     <AnimatedPressable
-      android_ripple={{ color: '#00000060', foreground: true }}
+      android_ripple={{ color: '#00000060', foreground: false }}
       style={[
         styles.container,
         { backgroundColor: colors.primary },

@@ -5,6 +5,7 @@ interface IGame {
   gameDifficultyLevel: GameDifficultyLevel;
   gameInfo: GameDifficulty;
   currentCitiesInfo: City[];
+  currentAnswers: string[];
   chooseDifficulty(difficulty: GameDifficultyLevel): void;
   nextRound(): Promise<City[]>;
 }
@@ -12,6 +13,7 @@ interface IGame {
 export class Game implements IGame {
   private currentCities: string[] = [];
   private _currentCitiesInfo: City[] = [];
+  private _currentAnswers: string[] = [];
   private _gameDifficultyLevel: GameDifficultyLevel = 'Easy';
 
   private readonly difficulties: GameDifficulties = {
@@ -47,8 +49,12 @@ export class Game implements IGame {
     const cityPromises: Promise<City>[] = this.currentCities.map(
       this.fetchCityDetails,
     );
-    this._currentCitiesInfo = await Promise.all(cityPromises);
-    return this._currentCitiesInfo;
+
+    const newCitiesInfo = await Promise.all(cityPromises);
+
+    this.findHighestTemperatures(newCitiesInfo);
+    this._currentCitiesInfo = newCitiesInfo;
+    return newCitiesInfo;
   }
 
   private fetchCityTemperature = async (city: string) => {
@@ -86,6 +92,22 @@ export class Game implements IGame {
     }
   }
 
+  private findHighestTemperatures(newCitiesInfo: City[]): void {
+    let currentMax: City = newCitiesInfo[0];
+    const max: City[] = [currentMax];
+    for (let i = 1; i < newCitiesInfo.length; i++) {
+      if (currentMax.temperature < newCitiesInfo[i].temperature) {
+        currentMax = newCitiesInfo[i];
+        max.length = 0;
+        max.push(currentMax);
+      } else if (currentMax.temperature === newCitiesInfo[i].temperature) {
+        max.push(newCitiesInfo[i]);
+      }
+    }
+
+    this._currentAnswers = max.map((item) => item.city);
+  }
+
   get gameInfo(): GameDifficulty {
     return this.difficulties[this._gameDifficultyLevel];
   }
@@ -96,5 +118,9 @@ export class Game implements IGame {
 
   get currentCitiesInfo(): City[] {
     return this._currentCitiesInfo;
+  }
+
+  get currentAnswers(): string[] {
+    return this._currentAnswers;
   }
 }
